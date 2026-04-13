@@ -1,7 +1,7 @@
 class Tribe < Formula
   desc "TribeEco - Decentralized Social Protocol on Solana"
   homepage "https://github.com/chaalpritam/TribeEco"
-  url "https://github.com/chaalpritam/TribeEco.git",
+  url "git@github.com:chaalpritam/TribeEco.git",
       tag:      "v0.1.0",
       revision: "HEAD"
   version "0.1.0"
