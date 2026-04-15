@@ -27,12 +27,6 @@ class Tribe < Formula
   end
 
   def post_install
-    # Start Colima if Docker daemon is not running
-    unless quiet_system("docker", "info")
-      ohai "Starting Colima (Docker runtime)..."
-      system "colima", "start"
-    end
-
     system "git", "-C", libexec.to_s, "submodule", "update", "--init", "--recursive"
     # Install frontend dependencies
     system "pnpm", "install", "--dir", "#{libexec}/tribe-app"
@@ -55,8 +49,7 @@ class Tribe < Formula
         tribe status       # check services
         tribe stop         # shut down
 
-      Colima and Docker are auto-started during install.
-      If Docker stops, restart with: colima start
+      Colima starts automatically when you run 'tribe start'.
     EOS
   end
 
