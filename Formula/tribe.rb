@@ -9,7 +9,9 @@ class Tribe < Formula
   depends_on "node"
   depends_on "pnpm"
   depends_on "docker"
+  depends_on "docker-compose"
   depends_on "colima"
+  depends_on "solana"
 
   def install
     libexec.install Dir["*"]
@@ -34,6 +36,13 @@ class Tribe < Formula
     system "git", "-C", libexec.to_s, "submodule", "update", "--init", "--recursive"
     # Install frontend dependencies
     system "pnpm", "install", "--dir", "#{libexec}/tribe-app"
+
+    # Generate ER server wallet if missing
+    wallet = "#{libexec}/tribe-er-server/server-wallet.json"
+    unless File.exist?(wallet)
+      ohai "Generating ER server wallet..."
+      system "solana-keygen", "new", "-o", wallet, "--no-bip39-passphrase"
+    end
   end
 
   def caveats
@@ -46,11 +55,8 @@ class Tribe < Formula
         tribe status       # check services
         tribe stop         # shut down
 
-      Start Colima before using tribe (if not using Docker Desktop):
-        colima start
-
-      Generate an ER server wallet if you don't have one:
-        solana-keygen new -o $(tribe version | grep Home | awk '{print $2}')/tribe-er-server/server-wallet.json --no-bip39-passphrase
+      Colima and Docker are auto-started during install.
+      If Docker stops, restart with: colima start
     EOS
   end
 
