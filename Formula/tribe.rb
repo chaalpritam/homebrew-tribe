@@ -31,11 +31,12 @@ class Tribe < Formula
     # Install frontend dependencies
     system "pnpm", "install", "--dir", "#{libexec}/tribe-app"
 
-    # Generate ER server wallet if missing
-    wallet = "#{libexec}/tribe-er-server/server-wallet.json"
-    unless File.exist?(wallet)
-      ohai "Generating ER server wallet..."
-      system "solana-keygen", "new", "-o", wallet, "--no-bip39-passphrase"
+    # Restore wallet from persistent location if it exists
+    persistent_wallet = File.expand_path("~/.tribe/server-wallet.json")
+    install_wallet = "#{libexec}/tribe-er-server/server-wallet.json"
+    if File.exist?(persistent_wallet) && !File.exist?(install_wallet)
+      ohai "Restoring ER server wallet from ~/.tribe/"
+      FileUtils.cp(persistent_wallet, install_wallet)
     end
   end
 
