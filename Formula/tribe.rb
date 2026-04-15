@@ -8,6 +8,8 @@ class Tribe < Formula
 
   depends_on "node"
   depends_on "pnpm"
+  depends_on "docker"
+  depends_on "colima"
 
   def install
     libexec.install Dir["*"]
@@ -38,7 +40,8 @@ class Tribe < Formula
         tribe status       # check services
         tribe stop         # shut down
 
-      You need Docker running (Docker Desktop or Colima).
+      Start Colima before using tribe (if not using Docker Desktop):
+        colima start
 
       Generate an ER server wallet if you don't have one:
         solana-keygen new -o $(tribe version | grep Home | awk '{print $2}')/tribe-er-server/server-wallet.json --no-bip39-passphrase
