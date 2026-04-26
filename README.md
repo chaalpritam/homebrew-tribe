@@ -43,6 +43,21 @@ tribe peer sync      # show sync status with peers
 | colima | Lightweight Docker runtime for macOS |
 | solana | Server wallet generation |
 
+## What `brew install` actually does
+
+The formula does the bare minimum to get the CLI on your `$PATH`:
+
+1. Copies the TribeEco project into `libexec` and exposes `bin/tribe`.
+2. `post_install` clones the submodules and installs frontend deps (`pnpm install` for `tribe-app`).
+3. Restores `~/.tribe/server-wallet.json` if a previous install left one behind.
+
+It does **not** start Colima, run `tribe doctor`, or generate a wallet. After install:
+
+```bash
+tribe doctor   # verify prerequisites and (if needed) generate the server wallet
+tribe start    # boot the stack
+```
+
 ## Uninstall
 
 ```bash
