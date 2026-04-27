@@ -28,7 +28,18 @@ class Tribe < Formula
   end
 
   def post_install
-    system "git", "-C", libexec.to_s, "submodule", "update", "--init", "--recursive"
+    # Avoid hanging on a credential prompt if a submodule's remote is private
+    ENV["GIT_TERMINAL_PROMPT"] = "0"
+
+    # Init each submodule separately so a private/unavailable one doesn't abort the install
+    submodules = `git -C "#{libexec}" config -f .gitmodules --get-regexp '^submodule\\..*\\.path$'`
+                   .lines.map { |l| l.split(/\s+/, 2)[1].to_s.strip }.reject(&:empty?)
+    submodules.each do |path|
+      unless quiet_system "git", "-C", libexec.to_s, "submodule", "update", "--init", "--recursive", path
+        opoo "Skipping submodule '#{path}' (clone failed — likely private or unavailable)."
+      end
+    end
+
     # Install frontend dependencies
     system "pnpm", "install", "--dir", "#{libexec}/tribe-app"
 
