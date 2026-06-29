@@ -7,7 +7,7 @@ Two formulas ship in this tap:
 | Formula | What it installs |
 |---------|-----------------|
 | `tribe` | Hub + ER server + CLI (`tribe` command) |
-| `tribe-app` | Next.js demo frontend (`tribe-app` command) |
+| `tribe-twitter-app` | Next.js demo frontend (`tribe-twitter-app` command) |
 
 ## Install
 
@@ -18,10 +18,10 @@ brew tap chaalpritam/tribe
 brew install tribe
 
 # Demo frontend (optional, separate):
-brew install tribe-app
+brew install tribe-twitter-app
 ```
 
-Both auto-install their dependencies (Docker, Colima, Node.js, pnpm, Solana CLI for `tribe`; Node.js and pnpm for `tribe-app`).
+Both auto-install their dependencies (Docker, Colima, Node.js, pnpm, Solana CLI for `tribe`; Node.js and pnpm for `tribe-twitter-app`).
 
 ## tribe — Hub + ER Stack
 
@@ -58,11 +58,11 @@ tribe hub-id set <name>   # set a custom hub ID
 tribe hub-id reset        # reset to a random unique ID
 ```
 
-## tribe-app — Demo Frontend
+## tribe-twitter-app — Demo Frontend
 
 ```bash
-tribe-app                    # start Next.js dev server on port 3002
-tribe-app link <hub-url>     # point the UI at a specific hub (saves to ~/.tribe/tribe-app.env)
+tribe-twitter-app                    # start Next.js dev server on port 3002
+tribe-twitter-app link <hub-url>     # point the UI at a specific hub (saves to ~/.tribe/tribe-twitter-app.env)
 ```
 
 ## What gets installed by `brew install tribe`
@@ -81,7 +81,7 @@ tribe-app link <hub-url>     # point the UI at a specific hub (saves to ~/.tribe
 The formula does the bare minimum to get the CLI on your `$PATH`:
 
 1. Copies the TribeEco project into `libexec` and exposes `bin/tribe`.
-2. `post_install` initialises submodules (excluding `tribe-app`, which has its own formula) and installs dependencies.
+2. `post_install` initialises submodules (excluding `tribe-twitter-app`, which has its own formula) and installs dependencies.
 3. Restores `~/.tribe/server-wallet.json` if a previous install left one behind.
 
 It does **not** start Colima, run `tribe doctor`, or generate a wallet. After install:
@@ -98,13 +98,13 @@ tribe start    # boot the stack
 | `server-wallet.json` | ER server Solana keypair — survives reinstalls |
 | `hub-id` | This hub's gossip identifier (auto-generated on first `tribe start`) |
 | `seed` | Seed node WebSocket URL (set via `tribe seed set <url>`) |
-| `tribe-app.env` | `NEXT_PUBLIC_HUB_URL` + `NEXT_PUBLIC_ER_SERVER_URL` for the demo UI |
+| `tribe-twitter-app.env` | `NEXT_PUBLIC_HUB_URL` + `NEXT_PUBLIC_ER_SERVER_URL` for the demo UI |
 
 ## Uninstall
 
 ```bash
 brew uninstall tribe
-brew uninstall tribe-app   # if installed
+brew uninstall tribe-twitter-app   # if installed
 brew untap chaalpritam/tribe
 ```
 
@@ -118,9 +118,9 @@ Server wallet is preserved at `~/.tribe/server-wallet.json` across reinstalls.
 | [tribe-sdk](../tribe-sdk) | TypeScript SDK — DirectSolana and EphemeralRollup providers; clients for identity, tweets, DMs, profiles, channels, bookmarks, polls, events, tasks, crowdfunds, tips, search |
 | [tribe-hub](../tribe-hub) | Decentralized hub — signed-message storage + Solana indexer + gossip peer sync; REST + WebSocket APIs |
 | [tribe-er-server](../tribe-er-server) | Ephemeral Rollup sequencer — instant follows, batched L1 settlement every 10s |
-| [tribe-app](../tribe-app) | Next.js frontend — protocol-first reference client with multi-node failover |
+| [tribe-twitter-app](../tribe-twitter-app) | Next.js frontend — protocol-first reference client with multi-node failover |
 | [tribeapp.wtf](../tribeapp.wtf) | Consumer-facing web app + landing page at tribeapp.wtf — hyperlocal social built entirely on the protocol |
 | [tribe-twitter](../tribe-twitter) | Native SwiftUI iOS client (Twitter-shaped) — full read/write against hub + ER, NaCl-box DMs, BLAKE3 + ed25519 signing via Apple CryptoKit |
 | [tribe-insta](../tribe-insta) | Native SwiftUI iOS client (Instagram-shaped) — photo grid, stories, reels; same hub + envelope format as tribe-twitter. Scaffolding stage — see `tribe-insta/PLAN.md` |
 | [tribe-core-swift](../tribe-core-swift) | Shared Swift package consumed by tribe-twitter + tribe-insta — crypto (BLAKE3, NaCl box, ed25519 signing, BIP39, SolanaHD), backup file format, envelope signer. See `tribe-core-swift/MIGRATION.md` |
-| [homebrew-tap](../homebrew-tap) | Homebrew formulas: `brew install tribe` (hub + ER) and `brew install tribe-app` (demo UI) |
+| [homebrew-tap](../homebrew-tap) | Homebrew formulas: `brew install tribe` (hub + ER) and `brew install tribe-twitter-app` (demo UI) |
